@@ -1,0 +1,55 @@
+#! /bin/bash
+###############################################################################
+# Name:         configure
+# Description:  This is the configuration script for `mkpkg`, It will create
+#               configuration files at ~/.config/mkpkg/. As well as ensure that
+#               all needed dependencies are available to make any source files
+#               that might need to be compiled.
+# Author:       Perry Bunn
+# Contact:      perry.bunn@noaa.gov
+# Version:      v1.0
+# History:      Original Copy
+# TODO:         See repository for project TODO and contributing guide.
+# License:      This Source Code Form is subject to the terms of the Mozilla
+#               Public License, v. 2.0. If a copy of the MPL was not distributed
+#               with this file, You can obtain one at
+#               http://mozilla.org/MPL/2.0/.
+###############################################################################
+
+# Variables
+CONFIG_DIR=~/.config/mkpkg
+
+#######################################
+# Checks existence of a directory
+# Globals:
+#   None
+# Arguments:
+#   Directory to check
+#######################################
+function verify_mkdir {
+    if [[ ! -d $1 ]]; then
+        err "Could not make the directory $($1)"
+        exit 1
+    fi
+}
+
+#######################################
+# Checks existence of a file
+# Globals:
+#   None
+# Arguments:
+#   File to check
+#######################################
+function verify_mkfile {
+    if [[ ! -e $1 ]]; then
+        err "Could not verify that $($1) exists."
+    fi
+}
+
+# Make config_dir if it doesnt exist
+if [[ ! -e $CONFIG_DIR ]]; then
+    mkdir $CONFIG_DIR
+    verify_mkdir $CONFIG_DIR
+fi
+
+# Create $CONFIG_DIR/config.yaml

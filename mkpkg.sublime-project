@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		}
+	],
+	"settings": {
+		// "SublimeLinter.linters.pylint.excludes": "*/*.md",
+		"SublimeLinter.linters.pylint.args": ["--rcfile=${folder}/pylintrc"],
+		"SublimeLinter.linters.pylint.python": "venv/bin/python",
+		"SublimeLinter.linters.pylint.executable": "${project_path}/venv/bin/pylint",
+	},
+}
+//s
