@@ -2,6 +2,14 @@
 	"folders": [
 		{
 			"path": ".",
+		},
+		{
+			"name": "~/.config/mkpkg/",
+			"path": "~/.config/mkpkg/",
+		},
+		{
+			"name": "/var/log/mkpkg",
+			"path": "/var/log/mkpkg/",
 		}
 	],
 	"settings": {

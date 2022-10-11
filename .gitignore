@@ -1,5 +1,8 @@
 **/__pycache__/
 venv/
+LOGS/
+releases/
 
 
 *.sublime-workspace
+*.mkpkg-conf

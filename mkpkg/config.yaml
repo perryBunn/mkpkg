@@ -1,0 +1,26 @@
+---
+version: 1.0
+args:
+  pkg_templates:
+    # NAME - Name of algorithm
+    # CONTENT - Contents of file- CODE, DATA, DOCS, custom
+    # DATE - Date in YYYYMMDD format
+    # V - Algorithm Version
+    # R - Algorithm Revision
+    # H - Delivery hotfix revision
+    &name_vrh_cont_date: "[NAME]_v[V]r[R]_deliv[H]_[CONTENT]_[DATE].tar.gz"
+    &name_vrh_date:      "[NAME]_v[V]r[R]_deliv[H]_[DATE].tar.gz"
+    &name_cont_date:     "[NAME]_[CONTENT]_[DATE].tar.gz"
+    &name_vr_cont_date:  "[NAME]_v[V]r[R]_[CONTENT]_[DATE].tar.gz"
+    &name_vr_date:       "[NAME]_v[V]r[R]_[DATE].tar.gz"
+    &name_cont:          "[NAME]_[CONTENT].tar.gz"
+    &name_vr_cont:       "[NAME]_v[V]r[R]_[CONTENT].tar.gz"
+    &name_vr:            "[NAME]_v[V]r[R].tar.gz"
+
+# Possible logging levels: DEBUG, INFO, WARNING, ERROR
+file_level: DEBUG
+stream_level: DEBUG
+logging_dir: /var/log/mkpkg/
+
+default_template: *name_cont_date
+default_release_dir: ~/releases/@NAME/@VERSION/@REVISION/

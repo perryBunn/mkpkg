@@ -1,4 +1,4 @@
-#! /usr/bin/ python3
+#! /usr/bin/python3
 """
 Name:           mkpkg.py
 Description:    TODO: Add Description
@@ -13,6 +13,7 @@ License:        This Source Code Form is subject to the terms of the Mozilla
                 http://mozilla.org/MPL/2.0/.
 """
 
+from argparse import ArgumentParser
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
@@ -126,7 +127,7 @@ def parse_path(path: str, **kargs) -> Path:
     return Path(tmp_str)
 
 
-def interactive(logger: Logger):
+def interactive(config: dict, logger: Logger):
     """
       Flow:
         1. Ask for package information.
@@ -174,7 +175,7 @@ def interactive(logger: Logger):
     print(f"Tar Names: {name_list_fmt(tar_names)}")
 
     store_str = get_response("Where would you like to store the tars?",
-                             default="./releases/@VERSION/@REVISION/")
+                             default=config["default_release_dir"])
     store = parse_path(path=store_str, DATE=date, NAME=name, VERSION=version,
                         REVISION=revision)
     store.mkdir(exist_ok=True, parents=True)
@@ -219,11 +220,33 @@ def interactive(logger: Logger):
             yaml.safe_dump(config, file)
 
 
-def main():
-    logger = get_logger()
+def parse_config(path: Path):
+    with open(path, mode='r', encoding="utf-8") as file:
+        return yaml.safe_load(file)
 
-    interactive(logger)
+
+def main(mkpkg_config="~/.config/mkpkg/config.yaml", algo_config=None):
+    config_path = Path(mkpkg_config).expanduser()
+    config = parse_config(config_path)
+    logger = get_logger(config)
+
+    logger.debug(f"Arguments: {mkpkg_config}\t{algo_config}")
+    logger.debug(f"config_path: {config_path}")
+    logger.debug(f"config: {config}")
+
+
+    if algo_config is not None:
+        algo_config_path = Path(algo_config)
+
+    interactive(config, logger)
 
 
 if __name__ == '__main__':
-    main()
+    parser = ArgumentParser(description="mkpkg")
+    parser.add_argument("-c", "--config", dest="mkpkg_config",
+        default="~/.config/mkpkg/config.yaml",
+        help="Config file used for default values across algorithms.")
+    parser.add_argument("ALGO_CONFIG", nargs="?",
+        help="Algorithm config file. Stores the files contained in each tar.")
+    args = parser.parse_args()
+    main(args.mkpkg_config, args.ALGO_CONFIG)

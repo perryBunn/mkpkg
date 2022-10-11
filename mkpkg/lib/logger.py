@@ -48,7 +48,7 @@ class ColoredFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def get_logger() -> Logger:
+def get_logger(config) -> Logger:
     """
       Method will return a logging object with stdout and file handlers
 
@@ -58,7 +58,7 @@ def get_logger() -> Logger:
       Returns:
       Logger: logging.Logger object
     """
-    log = logging.getLogger("LFSR")
+    log = logging.getLogger("mkpkg")
     log.setLevel("DEBUG")
 
     fmt = "%(asctime)s: %(name)s: %(levelname)s: %(message)s"
@@ -67,15 +67,15 @@ def get_logger() -> Logger:
     date = datetime.now()
     time = date.strftime("%Y%m%d%H%M")
 
-    log_dir = Path(f"LOGS/{time[:8]}")
+    log_dir = Path(f"{config['logging_dir']}/{time[:8]}").expanduser()
     log_dir.mkdir(exist_ok=True, parents=True)
 
-    file_name = (log_dir / f"{time}_LFSR.log").as_posix()
+    file_name = (log_dir / f"{time}_mkpkg.log").as_posix()
     file_handle = logging.FileHandler(file_name, encoding="utf-8")
-    file_handle.setLevel("DEBUG")
+    file_handle.setLevel(config["file_level"])
 
     stream_handle = logging.StreamHandler()
-    stream_handle.setLevel("INFO")
+    stream_handle.setLevel(config["stream_level"])
 
     file_fmt = logging.Formatter(fmt)
     stream_fmt = ColoredFormatter(fmt)
