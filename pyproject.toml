@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "mkpkg"
+version = "0.1.0"
+description = ""
+authors = ["Perry Bunn <perry.bunn@noaa.gov>"]
+readme = "readme.md"
+license = "MPL-2.0-or-later"
+repository = "https://github.com/perryBunn/mkpkg"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyyaml = "6.0"
+
+[tool.poetry.group.test.dependencies]
+pylint = "^2.12"
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

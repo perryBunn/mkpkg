@@ -8,19 +8,20 @@ args:
     # V - Algorithm Version
     # R - Algorithm Revision
     # H - Delivery hotfix revision
-    &name_vrh_cont_date: "[NAME]_v[V]r[R]_deliv[H]_[CONTENT]_[DATE].tar.gz"
-    &name_vrh_date:      "[NAME]_v[V]r[R]_deliv[H]_[DATE].tar.gz"
-    &name_cont_date:     "[NAME]_[CONTENT]_[DATE].tar.gz"
-    &name_vr_cont_date:  "[NAME]_v[V]r[R]_[CONTENT]_[DATE].tar.gz"
-    &name_vr_date:       "[NAME]_v[V]r[R]_[DATE].tar.gz"
-    &name_cont:          "[NAME]_[CONTENT].tar.gz"
-    &name_vr_cont:       "[NAME]_v[V]r[R]_[CONTENT].tar.gz"
-    &name_vr:            "[NAME]_v[V]r[R].tar.gz"
+    # SUFFIX - Archive file extension
+    &name_vrh_cont_date: "[NAME]_v[V]r[R]_deliv[H]_[CONTENT]_[DATE].[SUFFIX]"
+    &name_vrh_date:      "[NAME]_v[V]r[R]_deliv[H]_[DATE].[SUFFIX]"
+    &name_cont_date:     "[NAME]_[CONTENT]_[DATE].[SUFFIX]"
+    &name_vr_cont_date:  "[NAME]_v[V]r[R]_[CONTENT]_[DATE].[SUFFIX]"
+    &name_vr_date:       "[NAME]_v[V]r[R]_[DATE].[SUFFIX]"
+    &name_cont:          "[NAME]_[CONTENT].[SUFFIX]"
+    &name_vr_cont:       "[NAME]_v[V]r[R]_[CONTENT].[SUFFIX]"
+    &name_vr:            "[NAME]_v[V]r[R].[SUFFIX]"
 
 # Possible logging levels: DEBUG, INFO, WARNING, ERROR
 file_level: DEBUG
-stream_level: DEBUG
-logging_dir: /var/log/mkpkg/
+stream_level: INFO
+logging_dir: ./LOGS/
 
 default_template: *name_cont_date
-default_release_dir: ~/releases/@NAME/@VERSION/@REVISION/
+default_release_dir: ./releases/@NAME/@VERSION/

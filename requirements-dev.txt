@@ -1,7 +1,0 @@
-# non-dev Dependencies
--r requirements.txt
-
-
-# Dev Dependencies
-pylint
-pytest

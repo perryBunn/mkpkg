@@ -3,6 +3,8 @@ venv/
 LOGS/
 releases/
 
+.idea/workspace.xml
+.idea/tasks.xml
 
 *.sublime-workspace
-*.mkpkg-conf
+**/*.mkpkg-conf
