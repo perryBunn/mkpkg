@@ -18,10 +18,10 @@ from pathlib import Path
 
 import yaml
 
-from configure import make_config
-from interactive import interactive
-from lib.helpers import make_tarfiles
-from lib.logger import get_logger
+from .configure import make_config
+from .interactive import interactive
+from .lib.helpers import make_tarfiles
+from .lib.logger import get_logger
 
 
 def parse_config(path: Path) -> dict:
@@ -45,7 +45,7 @@ def main(mkpkg_config, algo_config, configure):
 
     try:
         config_path = Path(mkpkg_config).expanduser()
-    except Exception as err:
+    except Exception:
         # TODO: Need to specify which errors to catch
         pass
 
@@ -65,6 +65,7 @@ def main(mkpkg_config, algo_config, configure):
 
 
 class Namespace:
+    """ Class for argparse """
     configure: bool
     mkpkg_config: str
     algo_config: str

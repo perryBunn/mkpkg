@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from lib.helpers import get_response, insert_into, make_tarfiles, ordinal, parse_path
+from .lib.helpers import get_response, insert_into, make_tarfiles, ordinal, parse_path
 
 
 def __name_list_fmt(name_list: list) -> str:
