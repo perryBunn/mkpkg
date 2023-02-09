@@ -41,25 +41,36 @@ def parse_config(path: Path) -> dict:
 
 def main(mkpkg_config, algo_config, configure):
     if configure:
-        make_config()
+        try:
+            make_config()
+        except Exception as err:
+            # TODO: Add additional catches for permissions etc
+            raise err
+        else:
+            exit(0)
 
     try:
         config_path = Path(mkpkg_config).expanduser()
-    except Exception:
-        # TODO: Need to specify which errors to catch
-        pass
+        assert config_path.exists()
+    except AssertionError:
+        print("mkpkg cant find a config file. Run mkpkg --configure")
+        exit(1)
 
     config = parse_config(config_path)
     logger = get_logger(config)
 
-    logger.debug(f"Arguments: {mkpkg_config}\t{algo_config}")
+    logger.debug(f"Arguments: {mkpkg_config}\t{algo_config}\t{configure}")
     logger.debug(f"config_path: {config_path}")
     logger.debug(f"config: {config}")
 
     if algo_config is not None:
         algo_config_path = Path(algo_config)
         algo_configuration = parse_config(algo_config_path)
-        make_tarfiles(algo_configuration)
+        try:
+            make_tarfiles(algo_configuration)
+        except KeyError:
+            print("Algorithm package config is malformed")
+            exit(1)
     else:
         interactive(config, logger)
 

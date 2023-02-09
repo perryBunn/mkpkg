@@ -20,8 +20,8 @@ import tarfile
 import yaml
 
 
-def get_response(question: str, choices: list=None, default=None, tries: int=1,
-                 not_valid: list=None, permutations: bool=False) -> Union[None, str]:
+def get_response(question: str, choices: list = None, default=None, tries: int = 1,
+                 not_valid: list = None, permutations: bool = False) -> Union[None, str]:
     """ Gets response to a question asked.
         Parameters
         ----------
@@ -29,13 +29,15 @@ def get_response(question: str, choices: list=None, default=None, tries: int=1,
             Question to be asked to the user.
         choices: list
             List of valid responses.
+        default
+            Default response if tries are used or empty value is passed.
         tries: int
             Number of tries that the user has to answer the question.
         not_valid: list
             List of not valid responses.
         permutations: bool
             Creates permutations of valid responses. Useful for questions where
-            multiple responses could be possible/
+            multiple responses could be possible.
 
         Returns
         -------
@@ -49,7 +51,7 @@ def get_response(question: str, choices: list=None, default=None, tries: int=1,
             for j in range(1, upb):
                 if i == j:
                     continue
-                temp+=choices[j]
+                temp += choices[j]
                 choices.append(temp)
 
     # Strips chars ' ' and ':' from the question
@@ -59,8 +61,8 @@ def get_response(question: str, choices: list=None, default=None, tries: int=1,
     quest = f"{_question}"
     if choices:
         quest += " ("
-        for res in choices:
-            quest += f"{res} "
+        for choice in choices:
+            quest += f"{choice} "
         quest = quest.strip()  # Remove trailing ' '
         quest += ")"
     # TODO: Need to think of a better way to notate a default argument
@@ -85,7 +87,7 @@ def get_response(question: str, choices: list=None, default=None, tries: int=1,
     return None
 
 
-def insert_into(template: str, content: str, pattern: str= r"\[CONTENT\]") -> str:
+def insert_into(template: str, content: str, pattern: str = r"\[CONTENT\]") -> str:
     """ Inserts content into a template string that matches some regex pattern
     Parameters
     ----------
@@ -195,5 +197,3 @@ def parse_path(path: str, **kargs) -> Path:
             pass
 
     return Path(tmp_str)
-
-

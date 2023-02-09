@@ -1,7 +1,9 @@
 **/__pycache__/
+**/.pytest_cache/
 venv/
 LOGS/
 releases/
+.tox/
 
 .idea/workspace.xml
 .idea/tasks.xml
