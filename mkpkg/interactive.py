@@ -1,10 +1,17 @@
+""" Interactive
+Author:      Perry Bunn
+email:       perry.bunn@noaa.gov
+Description: This file is the methods called when mkpkg is being run in the
+             console.
+"""
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
 
 import yaml
 
-from .lib.helpers import get_response, insert_into, make_tarfiles, ordinal, parse_path
+from .lib.helpers import get_response, insert_into, make_tarfiles, ordinal, \
+                         parse_path
 
 
 def __name_list_fmt(name_list: list) -> str:
@@ -15,11 +22,13 @@ def __name_list_fmt(name_list: list) -> str:
 
     Returns
     -------
-
+    str
     """
     res = ""
+    # pylint: disable=R1713
     for name in name_list:
         res += f"\n\t{name}"
+    # pylint: enable=R1713
     return res
 
 
@@ -28,7 +37,7 @@ def interactive(config: dict, logger: Logger):
       Flow:
         1. Ask for package information.
           a. Ask for package name; Default will be the parent directory name.
-          b. Ask for package version
+          b. Ask for package version_flag
           c. Ask for revision number; Default is none - letting mkpkg decide.
         2. Ask how many tars to make. Default 3
         3. For each tar:
@@ -36,9 +45,10 @@ def interactive(config: dict, logger: Logger):
           b. Ask for files to include in this tar
           c. Ask if there are exclusions; pattern or file path
         4. Ask where you would like to place the tars;
-           Default location being ./releases/<version>/<revision>/
+           Default location being ./releases/<version_flag>/<revision>/
         5. Ask if you would like to save the config to a file.
     """
+    # TODO: Add logging statements
     default_content = ["CODE", "DOCS", "DATA", "other"]
     terminals = ["", "!", "?"]
     tar_names = []
@@ -47,16 +57,19 @@ def interactive(config: dict, logger: Logger):
     dir_name = current_dir.resolve().name
     date = datetime.now().strftime("%Y%m%d")
     name = get_response("What is the name of this package?", default=dir_name)
-    version = get_response("What is the package version? e.g. v1.0, v1r0")
+    version = get_response("What is the package version_flag? e.g. v1.0, v1r0")
     suffix = get_response("What type of archive do you want to create?",
                           choices=["tar", "tar.gz", "tar.bz2", "tar.xz"],
                           default="tar.gz")
     num_tars = int(get_response("How many archives should be made?", default='3'))
-    # TODO: Replace with config default template
-    tar_template = f"{name}_[CONTENT]_{date}.{suffix}"
+    tar_template = config["default_template"]
+    logger.debug("tar_template %s", tar_template)
 
     # Get tar content
     for i in range(num_tars):
+        # TODO: Need a better way to parse template file names for any wildcards
+        file_name = insert_into(tar_template, name, "\[NAME\]")
+        file_name = insert_into(file_name, date, "\[DATE\]")
         content = get_response(question=f"What is the content of the {ordinal(i+1)} archive?",
                                choices=default_content,
                                default=default_content[i])
@@ -65,8 +78,8 @@ def interactive(config: dict, logger: Logger):
             custom_type = get_response("What is the custom type?")
 
         if custom_type:
-            tar_names.append(insert_into(tar_template, custom_type))
-        tar_names.append(insert_into(tar_template, content))
+            tar_names.append(insert_into(file_name, custom_type))
+        tar_names.append(insert_into(file_name, content))
 
     print(f"Date: {date}")
     print(f"Name: {name}")
@@ -80,7 +93,7 @@ def interactive(config: dict, logger: Logger):
     config = {
         "date": date,
         "name": name,
-        "version": version,
+        "version_flag": version,
         "numtars": num_tars,
         "storestr": store_str,
         # TODO: Make sure that this works across OS

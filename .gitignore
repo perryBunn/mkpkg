@@ -1,12 +1,13 @@
 **/__pycache__/
 **/.pytest_cache/
-venv/
+.tox/
+build/
 LOGS/
 releases/
-.tox/
+venv/
 
 .idea/workspace.xml
 .idea/tasks.xml
 
-*.sublime-workspace
 **/*.mkpkg-conf
+*.sublime-workspace

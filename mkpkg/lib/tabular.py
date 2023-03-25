@@ -1,3 +1,10 @@
+""" Tabular
+Author:      Perry Bunn
+email:       perry.bunn@noaa.gov
+Description: This file is the methods called when mkpkg formats 2d list to
+             tables
+"""
+
 from math import floor, ceil
 
 
@@ -10,7 +17,7 @@ def tabular(d2_array: list[list], ceiling="-", roof='=', walls='|') -> str:
         i. update max column width
     2. for each row
       a. for column in row
-       i. make aligned version of column text
+       i. make aligned version_flag of column text
       b. make row text with walls
     3. return table text
 
@@ -77,6 +84,7 @@ def tabular(d2_array: list[list], ceiling="-", roof='=', walls='|') -> str:
 
 
 def main():
+    """ entry point for quick testing """
     table = [
         ["Header", "Header", "Header", "Header"],
         ["item", "item", "item", "item"],

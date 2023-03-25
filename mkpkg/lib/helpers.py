@@ -11,7 +11,7 @@ License:        This Source Code Form is subject to the terms of the Mozilla
                 with this file, You can obtain one at
                 https://mozilla.org/MPL/2.0/.
 """
-
+import logging
 from pathlib import Path
 from typing import Union
 
@@ -65,8 +65,8 @@ def get_response(question: str, choices: list = None, default=None, tries: int =
             quest += f"{choice} "
         quest = quest.strip()  # Remove trailing ' '
         quest += ")"
-    # TODO: Need to think of a better way to notate a default argument
-    # Its particularly confusing when there are also choices available
+    # TODO: Need to think of a better way to notate a default argument.
+    #       Its particularly confusing when there are also choices available
     if default:
         quest += f" [{default}]"
 
@@ -87,23 +87,29 @@ def get_response(question: str, choices: list = None, default=None, tries: int =
     return None
 
 
-def insert_into(template: str, content: str, pattern: str = r"\[CONTENT\]") -> str:
+def insert_into(template: str, content: str, pattern: str = "\[CONTENT\]") -> str:
     """ Inserts content into a template string that matches some regex pattern
     Parameters
     ----------
     template: str
         Some string that is to be modified
     content: str
-        Some string that is to inserted into the template
+        Some string that is to be inserted into the template
     pattern: str
         Some regex pattern that is to be matched in the template
 
     Returns
     -------
     str
-        Returns the interpolated version of the template string once the content is injected
+        Returns the interpolated version of the template string once the
+        content is injected
     """
+    logging.debug(f"{template}, {content}, {pattern}")
+    if not isinstance(pattern, str):
+        print(f"pattern is not of type str, is {type(pattern)}")
     type_pattern = re.compile(pattern)
+    if not isinstance(template, str):
+        print(f"template is not of type str, is {type(template)}")
     match = type_pattern.search(template)
 
     return f"{template[:match.start()]}{content}{template[match.end():]}"
@@ -179,7 +185,7 @@ def parse_config(path: Path) -> dict:
 def parse_path(path: str, **kargs) -> Path:
     """
         %NAME%      Inserts the name of the package into the path
-        %VERSION%   Inserts the version of the package into the path
+        %VERSION%   Inserts the version_flag of the package into the path
         %REVISION%  Inserts the revision of the package into the path
         %DATE%      Inserts the date into the path
     """

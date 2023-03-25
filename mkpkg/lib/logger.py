@@ -11,7 +11,7 @@ License:        This Source Code Form is subject to the terms of the Mozilla
                 with this file, You can obtain one at
                 http://mozilla.org/MPL/2.0/.
 """
-
+import sys
 from datetime import datetime
 from logging import Logger
 from pathlib import Path
@@ -67,22 +67,27 @@ def get_logger(config) -> Logger:
     date = datetime.now()
     time = date.strftime("%Y%m%d%H%M")
 
-    log_dir = Path(f"{config['logging_dir']}/{time[:8]}").expanduser()
-    log_dir.mkdir(exist_ok=True, parents=True)
-
-    file_name = (log_dir / f"{time}_mkpkg.log").as_posix()
-    file_handle = logging.FileHandler(file_name, encoding="utf-8")
-    file_handle.setLevel(config["file_level"])
+    log_dir = Path(f"{config['logging_dir']}/{time[:8]}/").expanduser()
+    try:
+        log_dir.mkdir(exist_ok=True, parents=True)
+    except PermissionError:
+        if input(f"Couldnt create {log_dir}, do you want to continue without "
+                 f"file logs? [N/y] ").lower() != "y":
+            sys.exit(2)
+    else:
+        file_name = (log_dir / f"{time}_mkpkg.log").as_posix()
+        file_handle = logging.FileHandler(file_name, encoding="utf-8")
+        file_handle.setLevel(config["file_level"])
+        file_fmt = logging.Formatter(fmt)
+        file_handle.setFormatter(file_fmt)
+        log.addHandler(file_handle)
 
     stream_handle = logging.StreamHandler()
     stream_handle.setLevel(config["stream_level"])
 
-    file_fmt = logging.Formatter(fmt)
     stream_fmt = ColoredFormatter(fmt)
-    file_handle.setFormatter(file_fmt)
     stream_handle.setFormatter(stream_fmt)
 
     log.addHandler(stream_handle)
-    log.addHandler(file_handle)
 
     return log

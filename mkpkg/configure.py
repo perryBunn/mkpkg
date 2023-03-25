@@ -20,7 +20,7 @@ from pathlib import Path
 
 CONFIG_DIR = "~/.config/mkpkg/"
 DEFAULT_CONFIG = """---
-version: 1.0
+version_flag: 1.0
 args:
   pkg_templates:
     # NAME - Name of algorithm
